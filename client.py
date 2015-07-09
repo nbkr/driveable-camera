@@ -1,4 +1,4 @@
-import Tkinter
+from Tkinter import *
 import time
 import threading
 import Queue
@@ -10,23 +10,35 @@ class GuiPart:
     def __init__(self, master, queue, endCommand):
         self.queue = queue
         # Set up the GUI
-        console = Tkinter.Button(master, text='Done', command=endCommand)
-        console.pack(  )
 
+        self.l = Label(master, text='No Image yet')
+        self.l.grid(row=1, column=0, columnspan=3)
 
         # Add more GUI stuff here depending on your specific needs
-        self.l = Tkinter.Label(master, text='No Image yet')
-        self.l.pack()
+        b1 = Button(master, text = 'Quit', command=endCommand)
+        b1.grid(row=0, column=0, sticky=W)
 
-        bleft = Tkinter.Button(master, text="Left")
-        bleft.bind('<Button-1>', self._leftDown)
-        bleft.bind('<ButtonRelease-1>', self._stopMotion)
-        bleft.pack()
+        b2 = Button(master, text = 'Forward')
+        b2.grid(row=2, column=1, sticky=W+E)
 
-        bright = Tkinter.Button(master, text="Right")
-        bright.bind('<Button-1>', self._rightDown)
-        bright.bind('<ButtonRelease-1>', self._stopMotion)
-        bright.pack()
+        b3 = Button(master, text = 'Left')
+        b3.grid(row=3, column=0, sticky=W+E)
+
+        b4 = Button(master, text = 'Right')
+        b4.grid(row=3, column=2, sticky=W+E)
+
+        b5 = Button(master, text = 'Reverse')
+        b5.grid(row=4, column=1, sticky=W+E)
+
+        #bleft = Tkinter.Button(master, text="Left")
+        #bleft.bind('<Button-1>', self._leftDown)
+        #bleft.bind('<ButtonRelease-1>', self._stopMotion)
+        #bleft.pack()
+
+        #bright = Tkinter.Button(master, text="Right")
+        #bright.bind('<Button-1>', self._rightDown)
+        #bright.bind('<ButtonRelease-1>', self._stopMotion)
+        #bright.pack()
 
         # Controlconnection
         # HOST, PORT = 'localhost', 9998
@@ -130,7 +142,7 @@ class ThreadHandler:
             time.sleep(0.1)
         self.master.quit()
 
-root = Tkinter.Tk()
+root = Tk()
 
 client = ThreadHandler(root)
 root.mainloop()
