@@ -21,7 +21,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
             except:
                 # Client closed/lost connection
                 break
-            time.sleep(1)
+            time.sleep(1.0/25.0)
 
 
 if __name__ == "__main__":

@@ -1,11 +1,16 @@
 import time
+import cv2
 
 
 class DataProvider(object):
 
     def __init__(self):
-        self._data = open('data.txt', 'r').readlines()
+        self._data = cv2.VideoCapture(0)
+
+    def __del__(self):
+        self._data.release()
 
     def getData(self):
-        frame = int(time.time()) % len(self._data)
-        return self._data[frame]
+        success, image = self._data.read()
+        ret, jpeg = cv2.imencode('.jpg', image)
+        return jpeg.tobytes()

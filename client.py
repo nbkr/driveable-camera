@@ -3,6 +3,8 @@ import time
 import threading
 import Queue
 import socket
+import io
+from PIL import ImageTk, Image
 
 class GuiPart:
     def __init__(self, master, queue, endCommand):
@@ -11,11 +13,10 @@ class GuiPart:
         console = Tkinter.Button(master, text='Done', command=endCommand)
         console.pack(  )
 
-        self.var = Tkinter.StringVar()
 
         # Add more GUI stuff here depending on your specific needs
-        l = Tkinter.Label(master, textvariable=self.var)
-        l.pack()
+        self.l = Tkinter.Label(master, text='No Image yet')
+        self.l.pack()
 
         bleft = Tkinter.Button(master, text="Left")
         bleft.bind('<Button-1>', self._leftDown)
@@ -56,7 +57,9 @@ class GuiPart:
                 # Check contents of message and do whatever is needed. As a
                 # simple test, print it (in real life, you would
                 # suitably update the GUI's display in a richer fashion).
-                self.var.set(msg)
+                img = ImageTk.PhotoImage(Image.open(io.BytesIO(msg)))
+                self.l.configure(image = img)
+                self.l.image = img
             except Queue.Empty:
                 # just on general principles, although we don't
                 # expect this branch to be taken in this case
@@ -115,7 +118,7 @@ class ThreadHandler:
         self.numThreads += 1
         while self.running:
             # Read messages (later images from the video link)
-            reply = sock.recv(16384)  # limit reply to 16K
+            reply = sock.recv(163840)  # limit reply to 16K
             self.queue.put(reply)
 
         sock.close()
